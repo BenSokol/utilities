@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 14th, 2019 [8:11am]
-* @Modified: February 14th, 2019 [9:32am]
+* @Modified: February 14th, 2019 [5:48pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -67,7 +67,7 @@ namespace UTL {
 
           // if hasTab, insert tab.
           if (hasTab) {
-            for (size_t i = 0; i < numTabs; ++i) {
+            for (size_t j = 0; j < numTabs; ++j) {
               str.insert(brk + 1, "\t");
             }
           }
