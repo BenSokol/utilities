@@ -1,9 +1,9 @@
 /**
-* @Filename: UTL_colors.hpp
+* @Filename: UTL_colors.h
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: February 13th, 2019 [1:09pm]
+* @Modified: February 15th, 2019 [12:56pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -11,6 +11,8 @@
 
 #ifndef UTL_COLORS_HPP
 #define UTL_COLORS_HPP
+
+extern "C" {
 
 namespace UTL {
   static const char COLOR_RESET[] = "\033[0m";
@@ -30,5 +32,5 @@ namespace UTL {
   static const char COLOR_CYAN[] = "\033[96m";
   static const char COLOR_GRAY[] = "\033[97m";
 }  // namespace UTL
-
+}
 #endif
