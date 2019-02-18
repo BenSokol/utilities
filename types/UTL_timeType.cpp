@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: February 15th, 2019 [12:58pm]
+* @Modified: February 18th, 2019 [2:13pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -24,43 +24,12 @@
 #include "UTL_timeType.hpp"
 
 namespace UTL {
-  namespace TIME {
-    // map of conversions from char* to T
-    template <typename T = size_t>
-    std::map<size_t, std::function<T(const char*)>> atoT{
-      /* Other types */
-      std::make_pair(typeid(bool).hash_code(), [](const char* s) { return std::atoi(s); }),
-      /* Char types */
-      std::make_pair(typeid(char).hash_code(), [](const char* s) { return std::atoi(s); }),
-      std::make_pair(typeid(signed char).hash_code(), [](const char* s) { return std::atoi(s); }),
-      std::make_pair(typeid(unsigned char).hash_code(), [](const char* s) { return std::atoi(s); }),
-      std::make_pair(typeid(char16_t).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
-      std::make_pair(typeid(char32_t).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
-      std::make_pair(typeid(wchar_t).hash_code(), [](const char* s) { return std::atoi(s); }),
-      /* Signed integer types */
-      std::make_pair(typeid(short int).hash_code(), [](const char* s) { return std::atoi(s); }),
-      std::make_pair(typeid(int).hash_code(), [](const char* s) { return std::atoi(s); }),
-      std::make_pair(typeid(long).hash_code(), [](const char* s) { return std::strtol(s, nullptr, 10); }),
-      std::make_pair(typeid(long long).hash_code(), [](const char* s) { return std::strtoll(s, nullptr, 10); }),
-      /* Unsigned integer types */
-      std::make_pair(typeid(unsigned short int).hash_code(),
-                     [](const char* s) { return std::strtoul(s, nullptr, 10); }),
-      std::make_pair(typeid(unsigned int).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
-      std::make_pair(typeid(unsigned long).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
-      std::make_pair(typeid(unsigned long long).hash_code(),
-                     [](const char* s) { return std::strtoul(s, nullptr, 10); }),
-      /* Floating point types */
-      std::make_pair(typeid(float).hash_code(), [](const char* s) { return std::strtof(s, nullptr); }),
-      std::make_pair(typeid(double).hash_code(), [](const char* s) { return std::strtod(s, nullptr); }),
-      std::make_pair(typeid(long double).hash_code(), [](const char* s) { return std::strtold(s, nullptr); })
-    };
-  }  // namespace TIME
 
 
   template <typename T>
   inline time_t<T>::time_t(TIME_ZONE tz) {
-    assert(TIME::atoT<T>.count(typeid(T).hash_code()) != 0);
-    assert(tz < COUNT);
+    UTL_assert(atoT.count(typeid(T).hash_code()) != 0);
+    UTL_assert(tz < COUNT);
 
     T hours = 0;
     T minutes = 0;
@@ -90,9 +59,9 @@ namespace UTL {
         UTL_assert_always();
       }
 
-      hours = TIME::atoT<T>[typeid(T).hash_code()](strHours);
-      minutes = TIME::atoT<T>[typeid(T).hash_code()](strMinutes);
-      seconds = TIME::atoT<T>[typeid(T).hash_code()](strSeconds);
+      hours = atoT[typeid(T).hash_code()](strHours);
+      minutes = atoT[typeid(T).hash_code()](strMinutes);
+      seconds = atoT[typeid(T).hash_code()](strSeconds);
       microseconds =
           std::chrono::duration_cast<std::chrono::microseconds>(
               now.time_since_epoch() - std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()))
@@ -134,19 +103,19 @@ namespace UTL {
 
   template <typename T>
   inline void time_t<T>::setHours(T hours) noexcept {
-    assert(hours < 24);
+    UTL_assert(hours < 24);
     mHours = hours;
   }
 
   template <typename T>
   inline void time_t<T>::setMinutes(T minutes) noexcept {
-    assert(minutes < 60);
+    UTL_assert(minutes < 60);
     mMinutes = minutes;
   }
 
   template <typename T>
   inline void time_t<T>::setSeconds(T seconds) noexcept {
-    assert(seconds < 60);
+    UTL_assert(seconds < 60);
     mSeconds = seconds;
   }
 
@@ -157,7 +126,7 @@ namespace UTL {
 
   template <typename T>
   inline std::string time_t<T>::to_string(size_t microsecondsPrecision) const {
-    assert(microsecondsPrecision <= 9);
+    UTL_assert(microsecondsPrecision <= 9);
     std::ostringstream ss;
     ss << std::setw(2) << std::setfill('0') << std::to_string(mHours) << ":";
     ss << std::setw(2) << std::setfill('0') << std::to_string(mMinutes) << ":";
@@ -170,5 +139,32 @@ namespace UTL {
     return ss.str();
   }
 
+  // map of conversions from char* to T
+  template <typename T>
+  std::map<size_t, std::function<T(const char*)>> time_t<T>::atoT{
+    /* Other types */
+    std::make_pair(typeid(bool).hash_code(), [](const char* s) { return std::atoi(s); }),
+    /* Char types */
+    std::make_pair(typeid(char).hash_code(), [](const char* s) { return std::atoi(s); }),
+    std::make_pair(typeid(signed char).hash_code(), [](const char* s) { return std::atoi(s); }),
+    std::make_pair(typeid(unsigned char).hash_code(), [](const char* s) { return std::atoi(s); }),
+    std::make_pair(typeid(char16_t).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    std::make_pair(typeid(char32_t).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    std::make_pair(typeid(wchar_t).hash_code(), [](const char* s) { return std::atoi(s); }),
+    /* Signed integer types */
+    std::make_pair(typeid(short int).hash_code(), [](const char* s) { return std::atoi(s); }),
+    std::make_pair(typeid(int).hash_code(), [](const char* s) { return std::atoi(s); }),
+    std::make_pair(typeid(long).hash_code(), [](const char* s) { return std::strtol(s, nullptr, 10); }),
+    std::make_pair(typeid(long long).hash_code(), [](const char* s) { return std::strtoll(s, nullptr, 10); }),
+    /* Unsigned integer types */
+    std::make_pair(typeid(unsigned short int).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    std::make_pair(typeid(unsigned int).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    std::make_pair(typeid(unsigned long).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    std::make_pair(typeid(unsigned long long).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    /* Floating point types */
+    std::make_pair(typeid(float).hash_code(), [](const char* s) { return std::strtof(s, nullptr); }),
+    std::make_pair(typeid(double).hash_code(), [](const char* s) { return std::strtod(s, nullptr); }),
+    std::make_pair(typeid(long double).hash_code(), [](const char* s) { return std::strtold(s, nullptr); })
+  };
 
 }  // namespace UTL

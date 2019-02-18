@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 14th, 2019 [8:11am]
-* @Modified: February 15th, 2019 [12:58pm]
+* @Modified: February 16th, 2019 [9:55pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -14,9 +14,11 @@
 #include <string>
 
 #ifdef __has_include
-#if __has_include(<sys/ioctl.h>) && __has_include(<unistd.h>)
+#if __has_include(<sys/ioctl.h>)
 #include <sys/ioctl.h>  // Get terminal window size
-#include <unistd.h>     // Get terminal window size
+#endif
+#if __has_include(<unistd.h>)
+#include <unistd.h>  // Get terminal window size
 #endif
 #endif
 

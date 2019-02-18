@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: February 14th, 2019 [9:34am]
+* @Modified: February 18th, 2019 [2:11pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -13,6 +13,8 @@
 #define UTL_TYPES_TIMETYPE_HPP
 
 #include <cstdlib>
+#include <functional>
+#include <map>
 #include <string>
 
 namespace UTL {
@@ -36,6 +38,7 @@ namespace UTL {
     inline std::string to_string(size_t microsecondsPrecision = 6) const;
 
   private:
+    static std::map<size_t, std::function<T(const char*)>> atoT;
     T mHours;
     T mMinutes;
     T mSeconds;

@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: February 15th, 2019 [12:56pm]
+* @Modified: February 16th, 2019 [8:52pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -12,9 +12,11 @@
 #ifndef UTL_COLORS_HPP
 #define UTL_COLORS_HPP
 
+#ifdef __cplusplus
 extern "C" {
-
 namespace UTL {
+#endif
+
   static const char COLOR_RESET[] = "\033[0m";
   static const char COLOR_BOLD[] = "\033[1m";
   static const char COLOR_RED_BOLD[] = "\033[1;91m";
@@ -31,6 +33,10 @@ namespace UTL {
   static const char COLOR_PURPLE[] = "\033[95m";
   static const char COLOR_CYAN[] = "\033[96m";
   static const char COLOR_GRAY[] = "\033[97m";
+
+#ifdef __cplusplus
 }  // namespace UTL
 }
+#endif
+
 #endif
