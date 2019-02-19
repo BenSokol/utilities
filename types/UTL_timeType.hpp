@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: February 18th, 2019 [2:11pm]
+* @Modified: February 19th, 2019 [12:40am]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -24,7 +24,7 @@ namespace UTL {
   public:
     typedef enum TIME_ZONE { LOCAL, UTC, DEFAULT, COUNT } TIME_ZONE;
 
-    inline time_t(TIME_ZONE tz = DEFAULT);
+    explicit inline time_t(TIME_ZONE tz = DEFAULT);
     inline ~time_t();
 
     inline T getHours() const noexcept;
