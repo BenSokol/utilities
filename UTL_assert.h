@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol <Ben>
 * @Email:    ben@bensokol.com
 * @Created:  February 14th, 2019 [10:14pm]
-* @Modified: February 19th, 2019 [12:37am]
+* @Modified: February 21st, 2019 [3:10am]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -59,15 +59,23 @@
 
 #if defined(__cplusplus)
 extern "C" {
+#endif
+
 void UTL_assert_private(const int exp, const char *str, const char *func, const char *file, const int line);
 void UTL_assert_continue_private(const int exp, const char *str, const char *func, const char *file, const int line);
+
+#if defined(NDEBUG)
+void UTL_assert_always_private(const char *func, const char *file, const int line);
+#else
+#if defined(__cplusplus)
 [[noreturn]] void UTL_assert_always_private(const char *func, const char *file, const int line);
-}
-#else   // #if defined(__cplusplus)
-void UTL_assert_private(const int exp, const char *str, const char *func, const char *file, const int line);
-void UTL_assert_continue_private(const int exp, const char *str, const char *func, const char *file, const int line);
+#else
 noreturn void UTL_assert_always_private(const char *func, const char *file, const int line);
 #endif  // #if defined(__cplusplus)
+#endif  // #if defined(NDEBUG)
 
+#if defined(__cplusplus)
+}
+#endif  // #if defined(__cplusplus)
 
 #endif  // #ifndef UTL_ASSERT_HPP

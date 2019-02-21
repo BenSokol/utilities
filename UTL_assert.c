@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol <Ben>
 * @Email:    ben@bensokol.com
 * @Created:  February 16th, 2019 [7:50pm]
-* @Modified: February 16th, 2019 [10:45pm]
+* @Modified: February 21st, 2019 [3:07am]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -18,9 +18,14 @@
 
 #if defined(NDEBUG)
 
-void UTL_assert_private(const int, const char *, const char *, const char *, const int) {}
-void UTL_assert_continue_private(const int, const char *, const char *, const char *, const int) {}
-noreturn void UTL_assert_always_private(const char *, const char *, const int) {}
+void UTL_assert_private(__attribute__((unused)) const int exp, __attribute__((unused)) const char *str,
+                        __attribute__((unused)) const char *func, __attribute__((unused)) const char *file,
+                        __attribute__((unused)) const int line) {}
+void UTL_assert_continue_private(__attribute__((unused)) const int exp, __attribute__((unused)) const char *str,
+                                 __attribute__((unused)) const char *func, __attribute__((unused)) const char *file,
+                                 __attribute__((unused)) const int line) {}
+void UTL_assert_always_private(__attribute__((unused)) const char *func, __attribute__((unused)) const char *file,
+                               __attribute__((unused)) const int line) {}
 
 #else  // #if defined(NDEBUG)
 
