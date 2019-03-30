@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:28am]
-* @Modified: February 14th, 2019 [5:48pm]
+* @Modified: March 29th, 2019 [10:58pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -21,8 +21,13 @@ namespace UTL {
     if (num.length() < 1) {
       return false;
     }
+    bool foundDecimalPoint = false;
     for (char chr : num) {
       if (num[0] == '-') {
+        continue;
+      }
+      if (!foundDecimalPoint && chr == '.') {
+        foundDecimalPoint = true;
         continue;
       }
       if (!isdigit(chr)) {
@@ -30,9 +35,17 @@ namespace UTL {
       }
     }
     try {
-      int temp = std::stoi(num);
-      if (temp >= min && temp <= max) {
-        return true;
+      if (foundDecimalPoint) {
+        double temp = std::stod(num);
+        if (temp >= min && temp <= max) {
+          return true;
+        }
+      }
+      else {
+        int temp = std::stoi(num);
+        if (temp >= min && temp <= max) {
+          return true;
+        }
       }
     } catch (const std::exception &) {
       return false;
