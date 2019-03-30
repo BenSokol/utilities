@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: March 20th, 2019 [3:26am]
+* @Modified: March 29th, 2019 [11:22pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -25,7 +25,7 @@
 
 namespace UTL {
 
-  std::atomic<UTL::COLOR::MODE> COLOR_MODE = UTL::COLOR::AUTO;
+  std::atomic<UTL::COLOR::MODE> COLOR_MODE(UTL::COLOR::AUTO);
 
   bool COLOR::isColorEnabled(std::ostream &os) noexcept {
     if (COLOR_MODE == MODES::AUTO) {
