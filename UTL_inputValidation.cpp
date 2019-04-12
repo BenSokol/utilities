@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:28am]
-* @Modified: March 29th, 2019 [10:58pm]
+* @Modified: April 12th, 2019 [12:39pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -42,7 +42,7 @@ namespace UTL {
         }
       }
       else {
-        int temp = std::stoi(num);
+        intmax_t temp = std::stoll(num);
         if (temp >= min && temp <= max) {
           return true;
         }
