@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: March 20th, 2019 [3:21am]
+* @Modified: April 11th, 2019 [5:02pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -17,11 +17,13 @@
 #endif
 
 #include <iostream>
+#include <string>
 
 namespace UTL {
 
   class COLOR {
   public:
+    ~COLOR() {}
     typedef enum class CODES : uint8_t {
       // styles
       reset = 0,
@@ -158,6 +160,7 @@ namespace UTL {
   private:
     // Instances of this class cannot be declared
     COLOR() {}
+    static const char* availableTerms[];
   };
 
 }  // namespace UTL

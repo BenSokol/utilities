@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: March 29th, 2019 [11:22pm]
+* @Modified: April 11th, 2019 [5:02pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -15,6 +15,7 @@
 #endif
 
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <cstdlib>
 #include <iostream>
@@ -25,12 +26,14 @@
 
 namespace UTL {
 
-  std::atomic<UTL::COLOR::MODE> COLOR_MODE(UTL::COLOR::AUTO);
+  const char *COLOR::availableTerms[] = { "ansi",  "color", "console", "gnome", "konsole", "kterm",
+                                          "linux", "rxvt",  "screen",  "vt100", "vt102",   "xterm" };
+
+  static std::atomic<UTL::COLOR::MODE> COLOR_MODE(UTL::COLOR::AUTO);
 
   bool COLOR::isColorEnabled(std::ostream &os) noexcept {
     if (COLOR_MODE == MODES::AUTO) {
-      static const std::string availableTerms[12] = { "ansi",  "color", "console", "gnome", "konsole", "kterm",
-                                                      "linux", "rxvt",  "screen",  "vt100", "vt102",   "xterm" };
+
       const char *currentTerm = std::getenv("TERM");
 
       if (((os.rdbuf() == std::cout.rdbuf() && isatty(fileno(stdout)) != 0)
