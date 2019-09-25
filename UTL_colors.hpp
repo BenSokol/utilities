@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: April 11th, 2019 [5:02pm]
+* @Modified: September 23rd, 2019 [7:51pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -91,6 +91,9 @@ namespace UTL {
     } MODE;
 
     friend std::ostream& operator<<(std::ostream& os, const CODE& value);
+
+    static std::string getColorCode(const CODE& value);
+
     static void setMode(const MODE value) noexcept;
     static MODE getMode() noexcept;
     static bool isColorEnabled(std::ostream& os = std::cout) noexcept;
