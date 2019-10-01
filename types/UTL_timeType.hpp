@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: February 21st, 2019 [4:40am]
+* @Modified: October 1st, 2019 [2:30am]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -89,9 +89,9 @@ namespace UTL {
       minutes = atoT[typeid(T).hash_code()](strMinutes);
       seconds = atoT[typeid(T).hash_code()](strSeconds);
       microseconds = static_cast<T>(
-          std::chrono::duration_cast<std::chrono::microseconds>(
-              now.time_since_epoch() - std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()))
-              .count());
+        std::chrono::duration_cast<std::chrono::microseconds>(
+          now.time_since_epoch() - std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()))
+          .count());
 
       delete[] strHours;
       delete[] strMinutes;
@@ -105,7 +105,8 @@ namespace UTL {
   }
 
   template <typename T>
-  inline timeType<T>::~timeType() {}
+  inline timeType<T>::~timeType() {
+  }
 
   template <typename T>
   inline T timeType<T>::getHours() const noexcept {
@@ -159,7 +160,7 @@ namespace UTL {
     ss << std::setw(2) << std::setfill('0') << std::to_string(mSeconds);
     if (microsecondsPrecision > 0) {
       ss << ".";
-      ss << std::setw(microsecondsPrecision) << std::setfill('0')
+      ss << std::setw(static_cast<int>(microsecondsPrecision)) << std::setfill('0')
          << std::to_string(mMicroseconds).substr(0, microsecondsPrecision);
     }
     return ss.str();
@@ -167,30 +168,84 @@ namespace UTL {
 
   // map of conversions from char* to T
   template <typename T>
-  std::map<size_t, std::function<T(const char*)>> timeType<T>::atoT{
+  std::map<size_t, std::function<T(const char*)>> timeType<T>::atoT {
     /* Other types */
-    std::make_pair(typeid(bool).hash_code(), [](const char* s) { return std::stoi(s); }),
+    std::make_pair(typeid(bool).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
     /* Char types */
-    std::make_pair(typeid(char).hash_code(), [](const char* s) { return std::stoi(s); }),
-    std::make_pair(typeid(signed char).hash_code(), [](const char* s) { return std::stoi(s); }),
-    std::make_pair(typeid(unsigned char).hash_code(), [](const char* s) { return std::stoul(s); }),
-    std::make_pair(typeid(char16_t).hash_code(), [](const char* s) { return std::stoi(s); }),
-    std::make_pair(typeid(char32_t).hash_code(), [](const char* s) { return std::stoi(s); }),
-    std::make_pair(typeid(wchar_t).hash_code(), [](const char* s) { return std::stoi(s); }),
+    std::make_pair(typeid(char).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
+    std::make_pair(typeid(signed char).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
+    std::make_pair(typeid(unsigned char).hash_code(),
+                   [](const char* s) {
+                     return std::stoul(s);
+                   }),
+    std::make_pair(typeid(char16_t).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
+    std::make_pair(typeid(char32_t).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
+    std::make_pair(typeid(wchar_t).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
     /* Signed integer types */
-    std::make_pair(typeid(short int).hash_code(), [](const char* s) { return std::stoi(s); }),
-    std::make_pair(typeid(int).hash_code(), [](const char* s) { return std::stoi(s); }),
-    std::make_pair(typeid(long).hash_code(), [](const char* s) { return std::stol(s); }),
-    std::make_pair(typeid(long long).hash_code(), [](const char* s) { return std::strtoll(s, nullptr, 10); }),
+    std::make_pair(typeid(short int).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
+    std::make_pair(typeid(int).hash_code(),
+                   [](const char* s) {
+                     return std::stoi(s);
+                   }),
+    std::make_pair(typeid(long).hash_code(),
+                   [](const char* s) {
+                     return std::stol(s);
+                   }),
+    std::make_pair(typeid(long long).hash_code(),
+                   [](const char* s) {
+                     return std::strtoll(s, nullptr, 10);
+                   }),
     /* Unsigned integer types */
-    std::make_pair(typeid(unsigned short int).hash_code(), [](const char* s) { return std::stoul(s); }),
-    std::make_pair(typeid(unsigned int).hash_code(), [](const char* s) { return std::stoul(s); }),
-    std::make_pair(typeid(unsigned long).hash_code(), [](const char* s) { return std::stoul(s); }),
-    std::make_pair(typeid(unsigned long long).hash_code(), [](const char* s) { return std::strtoul(s, nullptr, 10); }),
+    std::make_pair(typeid(unsigned short int).hash_code(),
+                   [](const char* s) {
+                     return std::stoul(s);
+                   }),
+    std::make_pair(typeid(unsigned int).hash_code(),
+                   [](const char* s) {
+                     return std::stoul(s);
+                   }),
+    std::make_pair(typeid(unsigned long).hash_code(),
+                   [](const char* s) {
+                     return std::stoul(s);
+                   }),
+    std::make_pair(typeid(unsigned long long).hash_code(),
+                   [](const char* s) {
+                     return std::strtoul(s, nullptr, 10);
+                   }),
     /* Floating point types */
-    std::make_pair(typeid(float).hash_code(), [](const char* s) { return std::strtof(s, nullptr); }),
-    std::make_pair(typeid(double).hash_code(), [](const char* s) { return std::strtod(s, nullptr); }),
-    std::make_pair(typeid(long double).hash_code(), [](const char* s) { return std::strtold(s, nullptr); })
+    std::make_pair(typeid(float).hash_code(),
+                   [](const char* s) {
+                     return std::strtof(s, nullptr);
+                   }),
+    std::make_pair(typeid(double).hash_code(),
+                   [](const char* s) {
+                     return std::strtod(s, nullptr);
+                   }),
+    std::make_pair(typeid(long double).hash_code(),
+                   [](const char* s) {
+                     return std::strtold(s, nullptr);
+                   })
   };
 
 }  // namespace UTL
