@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: October 1st, 2019 [2:30am]
+* @Modified: October 2nd, 2019 [9:49pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -12,8 +12,9 @@
 #ifndef UTL_TYPES_TIMETYPE_HPP
 #define UTL_TYPES_TIMETYPE_HPP
 
-#include <chrono>
 #include <cstdlib>
+
+#include <chrono>
 #include <functional>
 #include <iomanip>
 #include <map>
@@ -30,7 +31,8 @@ namespace UTL {
   public:
     typedef enum TIME_ZONE { LOCAL, UTC, DEFAULT, COUNT } TIME_ZONE;
 
-    explicit inline timeType(TIME_ZONE tz = DEFAULT);
+    explicit inline timeType(TIME_ZONE tz = DEFAULT,
+                             std::chrono::system_clock::time_point time = std::chrono::system_clock::now());
     inline ~timeType();
 
     inline T getHours() const noexcept;
@@ -53,7 +55,7 @@ namespace UTL {
 
 
   template <typename T>
-  inline timeType<T>::timeType(TIME_ZONE tz) {
+  inline timeType<T>::timeType(TIME_ZONE tz, std::chrono::system_clock::time_point time) {
     UTL_assert(atoT.count(typeid(T).hash_code()) != 0);
     UTL_assert(tz < COUNT);
 
@@ -63,13 +65,11 @@ namespace UTL {
     T microseconds = 0;
 
     if (tz != DEFAULT) {
-      std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-
       const char* strHours = new char[2];
       const char* strMinutes = new char[2];
       const char* strSeconds = new char[2];
 
-      time_t rawtime = std::chrono::system_clock::to_time_t(now);
+      time_t rawtime = std::chrono::system_clock::to_time_t(time);
 
       if (tz == LOCAL) {
         strftime(const_cast<char*>(strHours), 2, "%H", localtime(&rawtime));
@@ -90,7 +90,7 @@ namespace UTL {
       seconds = atoT[typeid(T).hash_code()](strSeconds);
       microseconds = static_cast<T>(
         std::chrono::duration_cast<std::chrono::microseconds>(
-          now.time_since_epoch() - std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()))
+          time.time_since_epoch() - std::chrono::duration_cast<std::chrono::seconds>(time.time_since_epoch()))
           .count());
 
       delete[] strHours;

@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 13th, 2019 [11:24am]
-* @Modified: September 23rd, 2019 [7:51pm]
+* @Modified: October 2nd, 2019 [9:49pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -11,15 +11,18 @@
 
 #if defined(__unix__) || defined(__unix) || defined(__linux__) || defined(__APPLE__) || defined(__MACH__)
 #else
-#error This operating system is NOT supported.
+  #error This operating system is NOT supported.
 #endif
+
+#include <cstdio>
+#include <cstdlib>
 
 #include <algorithm>
 #include <array>
 #include <atomic>
-#include <cstdlib>
 #include <iostream>
 #include <string>
+
 #include <unistd.h>
 
 #include "UTL_colors.hpp"
@@ -33,7 +36,6 @@ namespace UTL {
 
   bool COLOR::isColorEnabled(std::ostream &os) noexcept {
     if (COLOR_MODE == MODES::AUTO) {
-
       const char *currentTerm = std::getenv("TERM");
 
       if (((os.rdbuf() == std::cout.rdbuf() && isatty(fileno(stdout)) != 0)

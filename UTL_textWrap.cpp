@@ -3,27 +3,27 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 14th, 2019 [8:11am]
-* @Modified: February 16th, 2019 [9:55pm]
+* @Modified: October 2nd, 2019 [9:49pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
 */
 
-
+#include <cstdio>
 #include <cstdlib>
+
 #include <string>
 
 #ifdef __has_include
-#if __has_include(<sys/ioctl.h>)
-#include <sys/ioctl.h>  // Get terminal window size
-#endif
-#if __has_include(<unistd.h>)
-#include <unistd.h>  // Get terminal window size
-#endif
+  #if __has_include(<sys/ioctl.h>)
+    #include <sys/ioctl.h>  // Get terminal window size
+  #endif
+  #if __has_include(<unistd.h>)
+    #include <unistd.h>  // Get terminal window size
+  #endif
 #endif
 
 #include "UTL_assert.h"
-
 #include "UTL_textWrap.hpp"
 
 namespace UTL {
