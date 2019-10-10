@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: October 2nd, 2019 [9:49pm]
+* @Modified: October 9th, 2019 [10:05pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -65,21 +65,21 @@ namespace UTL {
     T microseconds = 0;
 
     if (tz != DEFAULT) {
-      const char* strHours = new char[2];
-      const char* strMinutes = new char[2];
-      const char* strSeconds = new char[2];
+      char strHours[3];
+      char strMinutes[3];
+      char strSeconds[3];
 
       time_t rawtime = std::chrono::system_clock::to_time_t(time);
 
       if (tz == LOCAL) {
-        strftime(const_cast<char*>(strHours), 2, "%H", localtime(&rawtime));
-        strftime(const_cast<char*>(strMinutes), 2, "%M", localtime(&rawtime));
-        strftime(const_cast<char*>(strSeconds), 2, "%S", localtime(&rawtime));
+        strftime(strHours, 3, "%H", localtime(&rawtime));
+        strftime(strMinutes, 3, "%M", localtime(&rawtime));
+        strftime(strSeconds, 3, "%S", localtime(&rawtime));
       }
       else if (tz == UTC) {
-        strftime(const_cast<char*>(strHours), 2, "%H", gmtime(&rawtime));
-        strftime(const_cast<char*>(strMinutes), 2, "%M", gmtime(&rawtime));
-        strftime(const_cast<char*>(strSeconds), 2, "%S", gmtime(&rawtime));
+        strftime(strHours, 3, "%H", gmtime(&rawtime));
+        strftime(strMinutes, 3, "%M", gmtime(&rawtime));
+        strftime(strSeconds, 3, "%S", gmtime(&rawtime));
       }
       else {
         UTL_assert_always();
@@ -92,10 +92,6 @@ namespace UTL {
         std::chrono::duration_cast<std::chrono::microseconds>(
           time.time_since_epoch() - std::chrono::duration_cast<std::chrono::seconds>(time.time_since_epoch()))
           .count());
-
-      delete[] strHours;
-      delete[] strMinutes;
-      delete[] strSeconds;
     }
 
     mHours = hours;
