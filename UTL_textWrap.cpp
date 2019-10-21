@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  February 14th, 2019 [8:11am]
-* @Modified: October 2nd, 2019 [9:49pm]
+* @Modified: October 21st, 2019 [4:36am]
 * @Version:  1.0.0
 *
 * Copyright (C) 2019 by Ben Sokol. All Rights Reserved.
@@ -27,19 +27,27 @@
 #include "UTL_textWrap.hpp"
 
 namespace UTL {
-  std::string textWrap(std::string str, const bool hasTab, const size_t tabLength, const size_t numTabs) {
+  std::string textWrap(std::string str,
+                       const bool hasTab,
+                       const size_t tabLength,
+                       const size_t numTabs,
+                       const size_t maxWidth) {
     // Get window_size
+    size_t window_size;
+
 #ifdef TIOCGSIZE
     struct ttysize ts;
     ioctl(STDIN_FILENO, TIOCGSIZE, &ts);
-    size_t const window_size = static_cast<size_t>(ts.ts_cols);
+    window_size = static_cast<size_t>(ts.ts_cols);
 #elif defined(TIOCGWINSZ)
     struct winsize ts;
     ioctl(STDIN_FILENO, TIOCGWINSZ, &ts);
-    size_t const window_size = static_cast<size_t>(ts.ws_col);
+    window_size = static_cast<size_t>(ts.ws_col);
 #else
-    size_t const window_size = 80;
+    window_size = 80;
 #endif
+
+    window_size = std::min(window_size, maxWidth);
 
     size_t segmentLength = 0;
 
