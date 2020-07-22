@@ -3,7 +3,7 @@
 * @Author:   Ben Sokol
 * @Email:    ben@bensokol.com
 * @Created:  July 19th, 2018 [8:20pm]
-* @Modified: October 9th, 2019 [10:05pm]
+* @Modified: June 30th, 2020 [5:04pm]
 * @Version:  1.0.0
 *
 * Copyright (C) 2018-2019 by Ben Sokol. All Rights Reserved.
@@ -43,7 +43,7 @@ namespace UTL {
     inline void setMinutes(T minutes) noexcept;
     inline void setSeconds(T seconds) noexcept;
     inline void setMicroseconds(T microseconds) noexcept;
-    inline std::string to_string(size_t microsecondsPrecision = 6) const;
+    inline std::string to_string(size_t microsecondsPrecision = 6, bool use12HourTime = false) const;
 
   private:
     static std::map<size_t, std::function<T(const char*)>> atoT;
@@ -148,16 +148,55 @@ namespace UTL {
   }
 
   template <typename T>
-  inline std::string timeType<T>::to_string(size_t microsecondsPrecision) const {
+  inline std::string timeType<T>::to_string(size_t microsecondsPrecision, bool use12HourTime) const {
     UTL_assert(microsecondsPrecision <= 9);
     std::ostringstream ss;
-    ss << std::setw(2) << std::setfill('0') << std::to_string(mHours) << ":";
+    T hours = mHours;
+    bool isAM = false;
+    bool isPM = false;
+    if (use12HourTime) {
+      if (hours < 12) {
+        isAM = true;
+      }
+      else if (hours >= 12 && hours <= 23) {
+        isPM = true;
+      }
+      else {
+        UTL_assert_always();
+      }
+
+      if (hours == 0) {
+        hours = 12;
+      }
+      else if (hours > 0 && hours <= 12) {
+        // pass
+      }
+      else if (hours > 12 && hours <= 23) {
+        hours -= 12;
+      }
+      else {
+        UTL_assert_always();
+      }
+    }
+
+    ss << std::setw(2) << std::setfill('0') << std::to_string(hours) << ":";
     ss << std::setw(2) << std::setfill('0') << std::to_string(mMinutes) << ":";
     ss << std::setw(2) << std::setfill('0') << std::to_string(mSeconds);
     if (microsecondsPrecision > 0) {
       ss << ".";
       ss << std::setw(static_cast<int>(microsecondsPrecision)) << std::setfill('0')
          << std::to_string(mMicroseconds).substr(0, microsecondsPrecision);
+    }
+    if (use12HourTime) {
+      if (isAM) {
+        ss << " AM";
+      }
+      else if (isPM) {
+        ss << " PM";
+      }
+      else {
+        UTL_assert_always();
+      }
     }
     return ss.str();
   }
